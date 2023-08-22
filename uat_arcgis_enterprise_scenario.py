@@ -69,24 +69,30 @@ def check_web_access(url_page, wa_portal, wa_server, uname, pwd):
     print('UAT Scenario for ArcGIS Server is Started')
     driver.get('{}/{}/manager'.format(url_page, wa_server))
 
+    print('ArcGIS Server home page Response : 200')
+
+    wait.until(EC.visibility_of_element_located((By.XPATH, '//*[@id="esri_discovery_dijit_NavigationTabs_0"]/div[3]/ul[2]/li[3]/a')))
+    driver.find_element(By.XPATH, '//*[@id="esri_discovery_dijit_NavigationTabs_0"]/div[3]/ul[2]/li[3]/a').click()
+
     time.sleep(10)
-
-    wait.until(EC.visibility_of_element_located((By.XPATH, '//*[@id="navtabs"]/div[1]/ul/li[2]')))
-    driver.find_element(By.XPATH, '//*[@id="navtabs"]/div[1]/ul/li[2]').click()
-
-    wait.until(EC.visibility_of_element_located((By.XPATH, '//*[@id="dataStoresLabel')))
-    driver.find_element(By.XPATH, '//*[@id="dataStoresLabel"]').click()
+    
 
     print('UAT Scenario for ArcGIS Server is Completed')
 
 
-    print('UAT Scenario for Datastore Validation started now')
+    print('UAT Scenario for Datastore is started')
+
+    wait.until(EC.visibility_of_element_located((By.XPATH, '//*[@id="esri_discovery_dijit_NavigationTabs_0"]/div[3]/ul[2]/li[1]/a')))
+    driver.find_element(By.XPATH, '//*[@id="esri_discovery_dijit_NavigationTabs_0"]/div[3]/ul[2]/li[1]/a').click()
+
+    wait.until(EC.visibility_of_element_located((By.XPATH, '//*[@id="dataStoresLabel')))
+    driver.find_element(By.XPATH, '//*[@id="dataStoresLabel"]').click()
 
     wait.until(EC.visibility_of_element_located((By.XPATH, '//*[@id="data"]/div[3]/table/tbody/tr/td[1]/span[2]')))
     driver.find_element(By.XPATH, '//*[@id="data"]/div[3]/table/tbody/tr/td[1]/span[2]').click()
     time.sleep(60)
 
-    print('UAT Scenario for Datastore Validation started now')
+    print('UAT Scenario for Datastore is completed')
 
     print('All UAT Scenario is Completed')
 
