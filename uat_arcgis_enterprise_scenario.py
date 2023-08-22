@@ -44,11 +44,15 @@ def check_web_access(url_page, wa_portal, wa_server, uname, pwd):
 
     print('Content page Response : 200')
 
+
+    ### Saved line for published hosted
     # wait.until(EC.visibility_of_element_located((By.XPATH, '//*[@id="create-dropdown"]')))
     # driver.find_element(By.XPATH, '//*[@id="create-dropdown"]').click()
+    ### Saved line for published hosted
 
-    wait.until(EC.visibility_of_element_located((By.XPATH, '/html/body/div[4]/arcgis-new-item/calcite-modal/calcite-button[3]')))
-    driver.find_element(By.XPATH, '/html/body/div[4]/arcgis-new-item/calcite-modal/calcite-button[3]').click()
+
+    wait.until(EC.visibility_of_element_located((By.XPATH, '//*[@id="esri-header-menus-link-desktop-0-6"]')))
+    driver.find_element(By.XPATH, '//*[@id="esri-header-menus-link-desktop-0-6"]').click()
 
     wait.until(EC.visibility_of_element_located((By.XPATH, '//*[@id="dijit__TemplatedMixin_0"]/div/nav/a[5]')))
     driver.find_element(By.XPATH, '//*[@id="dijit__TemplatedMixin_0"]/div/nav/a[5]').click()
@@ -71,6 +75,9 @@ def check_web_access(url_page, wa_portal, wa_server, uname, pwd):
 
     print('ArcGIS Server home page Response : 200')
 
+    wait.until(EC.visibility_of_element_located((By.XPATH, '//*[@id="navtabs"]/div[1]/ul/li[2]')))
+    driver.find_element(By.XPATH, '//*[@id="navtabs"]/div[1]/ul/li[2]').click()
+
     wait.until(EC.visibility_of_element_located((By.XPATH, '//*[@id="esri_discovery_dijit_NavigationTabs_0"]/div[3]/ul[2]/li[3]/a')))
     driver.find_element(By.XPATH, '//*[@id="esri_discovery_dijit_NavigationTabs_0"]/div[3]/ul[2]/li[3]/a').click()
 
@@ -85,7 +92,7 @@ def check_web_access(url_page, wa_portal, wa_server, uname, pwd):
     wait.until(EC.visibility_of_element_located((By.XPATH, '//*[@id="esri_discovery_dijit_NavigationTabs_0"]/div[3]/ul[2]/li[1]/a')))
     driver.find_element(By.XPATH, '//*[@id="esri_discovery_dijit_NavigationTabs_0"]/div[3]/ul[2]/li[1]/a').click()
 
-    wait.until(EC.visibility_of_element_located((By.XPATH, '//*[@id="dataStoresLabel')))
+    wait.until(EC.visibility_of_element_located((By.XPATH, '//*[@id="dataStoresLabel"]')))
     driver.find_element(By.XPATH, '//*[@id="dataStoresLabel"]').click()
 
     wait.until(EC.visibility_of_element_located((By.XPATH, '//*[@id="data"]/div[3]/table/tbody/tr/td[1]/span[2]')))
