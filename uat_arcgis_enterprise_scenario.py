@@ -15,6 +15,7 @@ def check_web_access(url_page, wa_portal, wa_server, uname, pwd):
     service = Service(executable_path="chromedriver.exe")
     driver = webdriver.Chrome(service=service)
     wait = WebDriverWait(driver, 60)
+    driver.maximize_window()
 
     print('UAT Scenario for Portal')
     driver.get('{}/{}/home'.format(url_page, wa_portal))
@@ -54,6 +55,7 @@ def check_web_access(url_page, wa_portal, wa_server, uname, pwd):
     wait.until(EC.visibility_of_element_located((By.XPATH, '//*[@id="dijit__TemplatedMixin_0"]/div/nav/a[5]')))
     driver.find_element(By.XPATH, '//*[@id="dijit__TemplatedMixin_0"]/div/nav/a[5]').click()
 
+    # There are bugs here
     # wait.until(EC.visibility_of_element_located((By.XPATH, '//*[@id="dijit__TemplatedMixin_24"]/button')))
     # driver.find_element(By.XPATH, '//*[@id="dijit__TemplatedMixin_24"]/button').click()
 
