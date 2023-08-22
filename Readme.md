@@ -5,6 +5,7 @@ type "python publishing_hosted_to_webmap.py"
 
 
 To use script uat_arcgis_enterprise_scenario.py
+Please run in the window resolution at the minium 1080p. This chrome version build is 116.0.5845.97
 1. create new conda-python environment
 2. activate the new environment
 3. install library selenium and requests
