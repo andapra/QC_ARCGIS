@@ -10,10 +10,25 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 
-def check_web_access(url_page, wa_portal, wa_server, uname, pwd):
+def choosing_driver(input_driver):
 
-    service = Service(executable_path="chromedriver.exe")
-    driver = webdriver.Chrome(service=service)
+    if input_driver == 'chrome':
+        service = Service(executable_path="chromedriver.exe")
+        driver = webdriver.Chrome(service=service)
+    
+    elif input_driver == 'edge':
+        options = webdriver.EdgeOptions()
+        driver = webdriver.Edge(options=options)
+
+    elif input_driver == 'firefox':
+        driver = webdriver.Firefox()
+
+    return driver
+
+def check_web_access(driver, url_page, wa_portal, wa_server, uname, pwd):
+
+    # service = Service(executable_path="chromedriver.exe")
+    # driver = webdriver.Chrome(service=service)
     wait = WebDriverWait(driver, 60)
     driver.maximize_window()
 
@@ -111,7 +126,13 @@ if __name__ == "__main__":
     web_adaptor_portal = input('Please input web adaptor portal: ')
     web_adaptor_server = input('Please input web adaptor server: ')
 
+    input_driver = input('Please input your browser that will be used for automation [edge/chrome/firefox]: ')
+    
     try:
-        check_web_access(url, web_adaptor_portal, web_adaptor_server, uname, pwd)
+        print('Preparing the web driver, you have choose {}'.format(input_driver))
+        get_driver = choosing_driver(input_driver)
+        print('Webdriver is completed')
+
+        check_web_access(get_driver, url, web_adaptor_portal, web_adaptor_server, uname, pwd)
     except Exception as e:
         raise(e)
