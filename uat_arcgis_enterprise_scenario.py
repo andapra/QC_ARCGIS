@@ -27,8 +27,6 @@ def choosing_driver(input_driver):
 
 def check_web_access(driver, url_page, wa_portal, wa_server, uname, pwd):
 
-    # service = Service(executable_path="chromedriver.exe")
-    # driver = webdriver.Chrome(service=service)
     wait = WebDriverWait(driver, 60)
     driver.maximize_window()
 
