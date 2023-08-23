@@ -107,6 +107,7 @@ def check_web_access(driver, url_page, wa_portal, wa_server, uname, pwd, file_zi
     input_desc_third_shadow_root.find_element(By.CSS_SELECTOR, 'div > div.element-wrapper > textarea').send_keys('This is automation publish to portal')
 
     driver.find_element(By.XPATH, '/html/body/div[4]/arcgis-new-item/calcite-modal/calcite-button[3]').click()
+    driver.save_screenshot(os.path.join(folder['portal'], 'portal_8.jpeg'))
 
     time.sleep(60)
     driver.find_element(By.XPATH, '/html/body/div[3]/div/div[1]/div/div/div[2]/div[4]/div/div/ul/li[7]').click()
@@ -119,7 +120,7 @@ def check_web_access(driver, url_page, wa_portal, wa_server, uname, pwd, file_zi
     driver.find_element(By.XPATH, '//*[@id="esri-header-menus-link-desktop-0-6"]').click()
     
     time.sleep(10)
-    driver.save_screenshot(os.path.join(folder['portal'], 'portal_8.jpeg'))
+    driver.save_screenshot(os.path.join(folder['portal'], 'portal_9.jpeg'))
 
     wait.until(EC.visibility_of_element_located((By.XPATH, '//*[@id="dijit__TemplatedMixin_0"]/div/nav/a[5]')))
     driver.find_element(By.XPATH, '//*[@id="dijit__TemplatedMixin_0"]/div/nav/a[5]').click()
@@ -130,7 +131,7 @@ def check_web_access(driver, url_page, wa_portal, wa_server, uname, pwd, file_zi
     driver.find_element(By.XPATH, '/html/body/div[3]/div/div[2]/main/div/div[3]/div[1]/fieldset/ul/li[9]/button').click()
     
     time.sleep(10)
-    driver.save_screenshot(os.path.join(folder['portal'], 'portal_9.jpeg'))
+    driver.save_screenshot(os.path.join(folder['portal'], 'portal_10.jpeg'))
 
     print('Please check manual federation server')
     print('UAT Scenario for Portal is Completed')
