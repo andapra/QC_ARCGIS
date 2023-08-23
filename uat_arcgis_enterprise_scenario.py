@@ -9,6 +9,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
+from pynput.keyboard import Key, Controller
 
 def choosing_driver(input_driver):
 
@@ -25,8 +26,9 @@ def choosing_driver(input_driver):
 
     return driver
 
-def check_web_access(driver, url_page, wa_portal, wa_server, uname, pwd):
-
+def check_web_access(driver, url_page, wa_portal, wa_server, uname, pwd, file_zip):
+    
+    keyboard = Controller()
     wait = WebDriverWait(driver, 60)
     driver.maximize_window()
 
@@ -44,12 +46,10 @@ def check_web_access(driver, url_page, wa_portal, wa_server, uname, pwd):
 
     wait.until(EC.visibility_of_element_located((By.XPATH, '//*[@id="user_username"]')))
     driver.find_element(By.XPATH, '//*[@id="user_username"]').send_keys(uname)
-    time.sleep(10)
 
     wait.until(EC.visibility_of_element_located((By.XPATH, '//*[@id="user_password"]')))
     driver.find_element(By.XPATH, '//*[@id="user_password"]').send_keys(pwd)
-    time.sleep(10)
-
+    
     wait.until(EC.visibility_of_element_located((By.XPATH, '//*[@id="signIn"]')))
     driver.find_element(By.XPATH, '//*[@id="signIn"]').click()
 
@@ -61,23 +61,59 @@ def check_web_access(driver, url_page, wa_portal, wa_server, uname, pwd):
     
     print('Content page Response : 200')
 
-    ### Saved line for published hosted
-    # wait.until(EC.visibility_of_element_located((By.XPATH, '//*[@id="create-dropdown"]')))
-    # driver.find_element(By.XPATH, '//*[@id="create-dropdown"]').click()
-    ### Saved line for published hosted
+    
+    print('Publish hosted file is started')
+    wait.until(EC.visibility_of_element_located((By.XPATH, '//*[@id="create-dropdown"]')))
+    driver.find_element(By.XPATH, '//*[@id="create-dropdown"]').click()
 
+    time.sleep(10)
+
+    first_step_upload_shadow_root = driver.find_element(By.XPATH, '/html/body/div[4]/arcgis-new-item/calcite-modal/div[2]/arcgis-new-item-pages-home').shadow_root
+    first_step_upload_child_shadow_root = first_step_upload_shadow_root.find_element(By.CSS_SELECTOR, 'arcgis-file-browser').shadow_root
+    first_step_upload_child_shadow_root.find_element(By.CSS_SELECTOR, 'arcgis-drag-and-drop > div > button').click()
+
+    time.sleep(10)
+
+    keyboard = Controller()
+    keyboard.type(file_zip)
+    keyboard.press(Key.enter)
+    keyboard.release(Key.enter)
+
+    time.sleep(10)
+
+    driver.find_element(By.XPATH, '/html/body/div[4]/arcgis-new-item/calcite-modal/calcite-button[3]').click()
+    time.sleep(10)
+
+    input_name_last_step_shadow_root = driver.find_element(By.XPATH, '/html/body/div[4]/arcgis-new-item/calcite-modal/div[2]/arcgis-new-item-pages-item-properties/arcgis-item-properties/arcgis-title-input').shadow_root
+    input_name_last_step_child_shadow_root= input_name_last_step_shadow_root.find_element(By.CSS_SELECTOR, '#item-properties-title').shadow_root
+    input_name_last_step_child_shadow_root.find_element(By.CSS_SELECTOR, 'div > div.element-wrapper > input[type=text]').send_keys('_publish_direct_portal')
+
+    input_desc_first_shadow_root = driver.find_element(By.XPATH, '/html/body/div[4]/arcgis-new-item/calcite-modal/div[2]/arcgis-new-item-pages-item-properties/arcgis-item-properties/arcgis-summary-input').shadow_root
+    time.sleep(10)
+
+    input_desc_second_shadow_root = input_desc_first_shadow_root.find_element(By.CSS_SELECTOR, 'calcite-label')
+    input_desc_third_shadow_root = input_desc_second_shadow_root.find_element(By.CSS_SELECTOR, '#summary-input').shadow_root
+    input_desc_third_shadow_root.find_element(By.CSS_SELECTOR, 'div > div.element-wrapper > textarea').send_keys('This is automation publish to portal')
+
+    driver.find_element(By.XPATH, '/html/body/div[4]/arcgis-new-item/calcite-modal/calcite-button[3]').click()
+
+    time.sleep(60)
+    driver.find_element(By.XPATH, '/html/body/div[3]/div/div[1]/div/div/div[2]/div[4]/div/div/ul/li[7]').click()
+    print('Publish hosted file is completed')
+
+
+    print('Checking federation server')
+    time.sleep(10)
     wait.until(EC.visibility_of_element_located((By.XPATH, '//*[@id="esri-header-menus-link-desktop-0-6"]')))
     driver.find_element(By.XPATH, '//*[@id="esri-header-menus-link-desktop-0-6"]').click()
 
     wait.until(EC.visibility_of_element_located((By.XPATH, '//*[@id="dijit__TemplatedMixin_0"]/div/nav/a[5]')))
     driver.find_element(By.XPATH, '//*[@id="dijit__TemplatedMixin_0"]/div/nav/a[5]').click()
 
-    # There are bugs here
     time.sleep(10)
     wait.until(EC.visibility_of_element_located((By.XPATH, '/html/body/div[3]/div/div[2]/main/div/div[3]/div[1]/fieldset/ul/li[9]/button')))
     driver.find_element(By.XPATH, '/html/body/div[3]/div/div[2]/main/div/div[3]/div[1]/fieldset/ul/li[9]/button').click()
-    time.sleep(10)
-
+    time.sleep(20)
     print('Please check manual federation server')
     print('UAT Scenario for Portal is Completed')
 
@@ -125,12 +161,13 @@ if __name__ == "__main__":
     web_adaptor_server = input('Please input web adaptor server: ')
 
     input_driver = input('Please input your browser that will be used for automation [edge/chrome/firefox]: ')
-    
+    file_zip = input('Please input file zip of shapefile: ')
+
     try:
         print('Preparing the web driver, you have choose {}'.format(input_driver))
         get_driver = choosing_driver(input_driver)
         print('Webdriver is completed')
 
-        check_web_access(get_driver, url, web_adaptor_portal, web_adaptor_server, uname, pwd)
+        check_web_access(get_driver, url, web_adaptor_portal, web_adaptor_server, uname, pwd, file_zip)
     except Exception as e:
         raise(e)
