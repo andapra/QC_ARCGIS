@@ -109,7 +109,6 @@ if __name__ == "__main__":
     input_driver = input('Please input your browser that will be used for automation [edge/chrome/firefox]: ')
     file_csv = input('Please input file csv: ')
 
-
     print('Preparing the screenshot folder')
     if os.path.isdir('screenshot'):
         pass
