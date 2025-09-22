@@ -9,8 +9,6 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-from pynput.keyboard import Key, Controller
-
 def choosing_driver(input_driver):
 
     if input_driver == 'chrome':
@@ -26,10 +24,9 @@ def choosing_driver(input_driver):
 
     return driver
 
-def check_web_access(driver, url_page, wa_portal, uname, pwd, file_csv, folder):
+def check_web_access(driver, url_page, wa_portal, uname, pwd, file_csv, sheet_name, folder):
     
-    keyboard = Controller()
-    wait = WebDriverWait(driver, 60)
+    wait = WebDriverWait(driver, 25)
     driver.maximize_window()
 
     print('UAT Scenario for Portal')
@@ -37,8 +34,8 @@ def check_web_access(driver, url_page, wa_portal, uname, pwd, file_csv, folder):
     time.sleep(10)
     driver.save_screenshot(os.path.join(folder['portal'], 'portal_1.jpeg'))
 
-    wait.until(EC.visibility_of_element_located((By.XPATH, '//*[@id="header"]/div/div/div[2]/div[11]/div/button')))
-    driver.find_element(By.XPATH, '//*[@id="header"]/div/div/div[2]/div[11]/div/button').click()
+    wait.until(EC.visibility_of_element_located((By.XPATH, '/html/body/div[1]/div[1]/div/div/div/div[2]/div[12]/div/button')))
+    driver.find_element(By.XPATH, '/html/body/div[1]/div[1]/div/div/div/div[2]/div[12]/div/button').click()
     time.sleep(10)
     driver.save_screenshot(os.path.join(folder['portal'], 'portal_2.jpeg'))
 
@@ -69,33 +66,43 @@ def check_web_access(driver, url_page, wa_portal, uname, pwd, file_csv, folder):
     time.sleep(10)
     driver.save_screenshot(os.path.join(folder['portal'], 'portal_4.jpeg'))
 
-    df = pd.read_excel(io=file_csv, sheet_name='list_portal')
+    df = pd.read_excel(io=file_csv, sheet_name=sheet_name)
     for index, row in df.iterrows():
         if row["type"] == "Dashboard":
-            driver.get('{}/{}/apps/dashboards/{}'.format(url_page, wa_portal, row["itemid"]))
-            time.sleep(60)
-            driver.save_screenshot(os.path.join(folder['portal'], 'dashboard_{}.jpeg'.format(row["itemid"])))
+            driver.get('{}/{}/apps/opsdashboard/index.html#/{}'.format(url_page, wa_portal, row["id"]))
+            time.sleep(25)
+            driver.save_screenshot(os.path.join(folder['portal'], 'dashboard_{}.jpeg'.format(row["id"])))
+            print("completed {} with {}".format(row["type"], row["id"]))
         elif row["type"] == "Web Map":
-            driver.get('{}/{}/apps/mapviewer/index.html?webmap={}'.format(url_page, wa_portal, row["itemid"]))
-            time.sleep(60)
-            driver.save_screenshot(os.path.join(folder['portal'], 'webmap_{}.jpeg'.format(row["itemid"])))
+            driver.get('{}/{}/home/webmap/viewer.html?webmap={}'.format(url_page, wa_portal, row["id"]))
+            time.sleep(25)
+            driver.save_screenshot(os.path.join(folder['portal'], 'webmap_{}.jpeg'.format(row["id"])))
+            print("completed {} with {}".format(row["type"], row["id"]))
         elif row["type"] == "Map Service":
-            driver.get('{}/{}/apps/mapviewer/index.html?layers={}'.format(url_page, wa_portal, row["itemid"]))
-            time.sleep(60)
-            driver.save_screenshot(os.path.join(folder['portal'], 'ms_{}.jpeg'.format(row["itemid"])))
+            driver.get('{}/{}/home/webmap/viewer.html?useExisting=1&layers={}'.format(url_page, wa_portal, row["id"]))
+            time.sleep(25)
+            driver.save_screenshot(os.path.join(folder['portal'], 'ms_{}.jpeg'.format(row["id"])))
+            print("completed {} with {}".format(row["type"], row["id"]))
         elif row["type"] == "Feature Service":
-            driver.get('{}/{}/apps/mapviewer/index.html?layers={}'.format(url_page, wa_portal, row["itemid"]))
-            time.sleep(60)
-            driver.save_screenshot(os.path.join(folder['portal'], 'fs_{}.jpeg'.format(row["itemid"])))
-        elif row["type"] == "Experience builder":
-            driver.get('{}/{}/apps/experiencebuilder/experience/?id={}'.format(url_page, wa_portal, row["itemid"]))
-            time.sleep(60)
-            driver.save_screenshot(os.path.join(folder['portal'], 'expb_{}.jpeg'.format(row["itemid"])))
-        elif row["type"] == "Web App":
-            driver.get('{}/{}/apps/webappviewer/index.html?id={}'.format(url_page, wa_portal, row["itemid"]))
-            time.sleep(60)
-            driver.save_screenshot(os.path.join(folder['portal'], 'webapp_{}.jpeg'.format(row["itemid"])))
-
+            driver.get('{}/{}/home/webmap/viewer.html?useExisting=1&layers={}'.format(url_page, wa_portal, row["id"]))
+            time.sleep(25)
+            driver.save_screenshot(os.path.join(folder['portal'], 'fs_{}.jpeg'.format(row["id"])))
+            print("completed {} with {}".format(row["type"], row["id"]))
+        elif row["type"] == "Web Mapping Application":
+            driver.get('{}/{}/apps/webappviewer/index.html?id={}'.format(url_page, wa_portal, row["id"]))
+            time.sleep(25)
+            driver.save_screenshot(os.path.join(folder['portal'], 'webapp_{}.jpeg'.format(row["id"])))
+            print("completed {} with {}".format(row["type"], row["id"]))
+        elif row["type"] == "Image Service":
+            driver.get('{}/{}/home/webmap/viewer.html?useExisting=1&layers={}'.format(url_page, wa_portal, row["id"]))
+            time.sleep(25)
+            driver.save_screenshot(os.path.join(folder['portal'], 'is_{}.jpeg'.format(row["id"]))) 
+            print("completed {} with {}".format(row["type"], row["id"]))
+        elif row["type"] == "Web Scene":
+            driver.get('{}/{}/webscene/viewer.html?webscene=={}'.format(url_page, wa_portal, row["id"]))
+            time.sleep(25)
+            driver.save_screenshot(os.path.join(folder['portal'], 'webscene_{}.jpeg'.format(row["id"])))            
+            print("completed {} with {}".format(row["type"], row["id"]))
     print('All Checking is Completed')
 
 if __name__ == "__main__":
@@ -104,10 +111,10 @@ if __name__ == "__main__":
     pwd = input('Please input administrator password: ')
 
     web_adaptor_portal = input('Please input web adaptor portal: ')
-    web_adaptor_server = input('Please input web adaptor server: ')
 
     input_driver = input('Please input your browser that will be used for automation [edge/chrome/firefox]: ')
-    file_csv = input('Please input file csv: ')
+    file_csv = input('Please input file excel: ')
+    sheet_name = input('Please input sheet_name: ')
 
     print('Preparing the screenshot folder')
     if os.path.isdir('screenshot'):
@@ -132,6 +139,6 @@ if __name__ == "__main__":
         get_driver = choosing_driver(input_driver)
         print('Webdriver is completed')
 
-        check_web_access(get_driver, url, web_adaptor_portal, uname, pwd, file_csv, json_folder)
+        check_web_access(get_driver, url, web_adaptor_portal, uname, pwd, file_csv, sheet_name, json_folder)
     except Exception as e:
         raise(e)
