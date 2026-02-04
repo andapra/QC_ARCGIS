@@ -32,12 +32,12 @@ def check_web_access(driver, url_page, wa_portal, uname, pwd, file_csv, sheet_na
     print('UAT Scenario for Portal')
     driver.get('{}/{}/home'.format(url_page, wa_portal))
     time.sleep(10)
-    driver.save_screenshot(os.path.join(folder['portal'], 'portal_1.jpeg'))
+    driver.save_screenshot(os.path.join(folder['portal'], 'portal_1.png'))
 
-    wait.until(EC.visibility_of_element_located((By.XPATH, '/html/body/div[1]/div[1]/div/div/div/div[2]/div[12]/div/button')))
-    driver.find_element(By.XPATH, '/html/body/div[1]/div[1]/div/div/div/div[2]/div[12]/div/button').click()
+    wait.until(EC.visibility_of_element_located((By.XPATH, '//*[@id="header"]/div/div/div[2]/div[12]/div/button')))
+    driver.find_element(By.XPATH, '//*[@id="header"]/div/div/div[2]/div[12]/div/button').click()
     time.sleep(10)
-    driver.save_screenshot(os.path.join(folder['portal'], 'portal_2.jpeg'))
+    driver.save_screenshot(os.path.join(folder['portal'], 'portal_2.png'))
 
     print('Portal landing page Response : 200')
 
@@ -51,7 +51,7 @@ def check_web_access(driver, url_page, wa_portal, uname, pwd, file_csv, sheet_na
     wait.until(EC.visibility_of_element_located((By.XPATH, '//*[@id="user_password"]')))
     driver.find_element(By.XPATH, '//*[@id="user_password"]').send_keys(pwd)
     
-    driver.save_screenshot(os.path.join(folder['portal'], 'portal_3.jpeg'))
+    driver.save_screenshot(os.path.join(folder['portal'], 'portal_3.png'))
 
     wait.until(EC.visibility_of_element_located((By.XPATH, '//*[@id="signIn"]')))
     driver.find_element(By.XPATH, '//*[@id="signIn"]').click()
@@ -64,44 +64,45 @@ def check_web_access(driver, url_page, wa_portal, uname, pwd, file_csv, sheet_na
     
     print('Content page Response : 200')
     time.sleep(10)
-    driver.save_screenshot(os.path.join(folder['portal'], 'portal_4.jpeg'))
+    driver.save_screenshot(os.path.join(folder['portal'], 'portal_4.png'))
 
     df = pd.read_excel(io=file_csv, sheet_name=sheet_name)
     for index, row in df.iterrows():
         if row["type"] == "Dashboard":
             driver.get('{}/{}/apps/opsdashboard/index.html#/{}'.format(url_page, wa_portal, row["id"]))
             time.sleep(25)
-            driver.save_screenshot(os.path.join(folder['portal'], 'dashboard_{}.jpeg'.format(row["id"])))
+            driver.save_screenshot(os.path.join(folder['portal'], 'dashboard_{}.png'.format(row["id"])))
             print("completed {} with {}".format(row["type"], row["id"]))
         elif row["type"] == "Web Map":
             driver.get('{}/{}/home/webmap/viewer.html?webmap={}'.format(url_page, wa_portal, row["id"]))
             time.sleep(25)
-            driver.save_screenshot(os.path.join(folder['portal'], 'webmap_{}.jpeg'.format(row["id"])))
+            driver.save_screenshot(os.path.join(folder['portal'], 'webmap_{}.png'.format(row["id"])))
             print("completed {} with {}".format(row["type"], row["id"]))
         elif row["type"] == "Map Service":
             driver.get('{}/{}/home/webmap/viewer.html?useExisting=1&layers={}'.format(url_page, wa_portal, row["id"]))
             time.sleep(25)
-            driver.save_screenshot(os.path.join(folder['portal'], 'ms_{}.jpeg'.format(row["id"])))
+            driver.save_screenshot(os.path.join(folder['portal'], 'ms_{}.png'.format(row["id"])))
             print("completed {} with {}".format(row["type"], row["id"]))
         elif row["type"] == "Feature Service":
             driver.get('{}/{}/home/webmap/viewer.html?useExisting=1&layers={}'.format(url_page, wa_portal, row["id"]))
             time.sleep(25)
-            driver.save_screenshot(os.path.join(folder['portal'], 'fs_{}.jpeg'.format(row["id"])))
+            driver.save_screenshot(os.path.join(folder['portal'], 'fs_{}.png'.format(row["id"])))
             print("completed {} with {}".format(row["type"], row["id"]))
         elif row["type"] == "Web Mapping Application":
-            driver.get('{}/{}/apps/webappviewer/index.html?id={}'.format(url_page, wa_portal, row["id"]))
+            # driver.get('{}/{}/apps/webappviewer/index.html?id={}'.format(url_page, wa_portal, row["id"]))
+            driver.get(row["url"])
             time.sleep(25)
-            driver.save_screenshot(os.path.join(folder['portal'], 'webapp_{}.jpeg'.format(row["id"])))
+            driver.save_screenshot(os.path.join(folder['portal'], 'webapp_{}.png'.format(row["id"])))
             print("completed {} with {}".format(row["type"], row["id"]))
         elif row["type"] == "Image Service":
             driver.get('{}/{}/home/webmap/viewer.html?useExisting=1&layers={}'.format(url_page, wa_portal, row["id"]))
             time.sleep(25)
-            driver.save_screenshot(os.path.join(folder['portal'], 'is_{}.jpeg'.format(row["id"]))) 
+            driver.save_screenshot(os.path.join(folder['portal'], 'is_{}.png'.format(row["id"]))) 
             print("completed {} with {}".format(row["type"], row["id"]))
         elif row["type"] == "Web Scene":
-            driver.get('{}/{}/webscene/viewer.html?webscene=={}'.format(url_page, wa_portal, row["id"]))
+            driver.get('{}/{}/webscene/viewer.html?webscene={}'.format(url_page, wa_portal, row["id"]))
             time.sleep(25)
-            driver.save_screenshot(os.path.join(folder['portal'], 'webscene_{}.jpeg'.format(row["id"])))            
+            driver.save_screenshot(os.path.join(folder['portal'], 'webscene_{}.png'.format(row["id"])))            
             print("completed {} with {}".format(row["type"], row["id"]))
     print('All Checking is Completed')
 
